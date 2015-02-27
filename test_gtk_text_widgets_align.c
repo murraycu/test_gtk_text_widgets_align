@@ -177,7 +177,7 @@ add_row_to_grid_of_text_widgets (GtkGrid *grid, gint row, const gchar *title, Gt
 static void
 make_widget_higher (GtkWidget *widget)
 {
-  gtk_widget_set_size_request (widget, -1, 120);
+  gtk_widget_set_size_request (widget, -1, 100);
   gtk_widget_set_valign (widget, GTK_ALIGN_START);
 }
 
