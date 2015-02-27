@@ -25,6 +25,10 @@
 #include<gtk/gtk.h>
 
 GList *text_widgets = NULL;
+const char* EXAMPLE_TEXT_SINGLE =
+  "Single line of example text.";
+const char* EXAMPLE_TEXT_MULTIPLE =
+  "Multiple lines of example text. Multiple lines of example text. Multiple lines of example text. Multiple lines of example text.";
  
 static gint
 on_delete_event (GtkWidget* w, GdkEventAny* e, gpointer data)
@@ -234,13 +238,13 @@ create_grid_of_text_widgets ()
   gtk_grid_set_column_spacing (GTK_GRID(grid), 6);
 
   // Row 0:
-  label = gtk_label_new("Single line of example text.");
+  label = gtk_label_new(EXAMPLE_TEXT_SINGLE);
   make_widget_higher (label);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 0, "GtkLabel (single line):", label);
   text_widgets = g_list_append (text_widgets, label);
 
   // Row 1:
-  label = gtk_label_new("Multiple lines of example text. Multiple lines of example text. Multiple lines of example text. Multiple lines of example text");
+  label = gtk_label_new(EXAMPLE_TEXT_MULTIPLE);
   make_widget_higher (label);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 1, "GtkLabel (multi-line):", label);
@@ -248,7 +252,7 @@ create_grid_of_text_widgets ()
 
   // Row 2:
   entry = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entry), "Single example line of text.");
+  gtk_entry_set_text (GTK_ENTRY (entry), EXAMPLE_TEXT_SINGLE);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 2, "GtkEntry:", entry);
   text_widgets = g_list_append (text_widgets, entry);
 
@@ -257,7 +261,7 @@ create_grid_of_text_widgets ()
   make_widget_higher (textview);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-  gtk_text_buffer_set_text (buffer, "Some example text. Some example text. Some example text.", -1);
+  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_MULTIPLE, -1);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 3, "GtkTextView:", textview);
   text_widgets = g_list_append (text_widgets, textview);
 
