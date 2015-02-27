@@ -265,6 +265,15 @@ create_grid_of_text_widgets ()
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 3, "GtkTextView:", textview);
   text_widgets = g_list_append (text_widgets, textview);
 
+  // Row 4:
+  textview = gtk_text_view_new ();
+  make_widget_higher (textview);
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_SINGLE, -1);
+  add_row_to_grid_of_text_widgets (GTK_GRID (grid), 4, "GtkTextView:", textview);
+  text_widgets = g_list_append (text_widgets, textview);
+
   return grid;
 }
 
