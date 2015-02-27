@@ -251,28 +251,28 @@ create_grid_of_text_widgets ()
   text_widgets = g_list_append (text_widgets, label);
 
   // Row 2:
-  entry = gtk_entry_new ();
-  gtk_entry_set_text (GTK_ENTRY (entry), EXAMPLE_TEXT_SINGLE);
-  add_row_to_grid_of_text_widgets (GTK_GRID (grid), 2, "GtkEntry:", entry);
-  text_widgets = g_list_append (text_widgets, entry);
+  textview = gtk_text_view_new ();
+  make_widget_higher (textview);
+  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_MULTIPLE, -1);
+  add_row_to_grid_of_text_widgets (GTK_GRID (grid), 2, "GtkTextView:", textview);
+  text_widgets = g_list_append (text_widgets, textview);
 
   // Row 3:
   textview = gtk_text_view_new ();
   make_widget_higher (textview);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_MULTIPLE, -1);
+  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_SINGLE, -1);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 3, "GtkTextView:", textview);
   text_widgets = g_list_append (text_widgets, textview);
 
   // Row 4:
-  textview = gtk_text_view_new ();
-  make_widget_higher (textview);
-  gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
-  gtk_text_buffer_set_text (buffer, EXAMPLE_TEXT_SINGLE, -1);
-  add_row_to_grid_of_text_widgets (GTK_GRID (grid), 4, "GtkTextView:", textview);
-  text_widgets = g_list_append (text_widgets, textview);
+  entry = gtk_entry_new ();
+  gtk_entry_set_text (GTK_ENTRY (entry), EXAMPLE_TEXT_SINGLE);
+  add_row_to_grid_of_text_widgets (GTK_GRID (grid), 4, "GtkEntry:", entry);
+  text_widgets = g_list_append (text_widgets, entry);
 
   return grid;
 }
