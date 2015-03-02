@@ -54,6 +54,25 @@ on_check_button_halign_toggled (GtkToggleButton *togglebutton, gpointer user_dat
 }
 
 static void
+on_check_button_label_set_xalign_toggled (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  gboolean set = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton));
+  float align = set ? 1.0 : 0.5;
+
+  GList *l = text_widgets;
+  while (l != NULL)
+  {
+    GtkWidget *text_widget = GTK_WIDGET (l->data);
+    if (GTK_IS_LABEL (text_widget)) {
+      gtk_label_set_xalign (GTK_LABEL (text_widget), align);
+    }
+
+    l = l->next;
+  }
+}
+
+/*
+static void
 on_check_button_misc_alignment_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 {
   gboolean set = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton));
@@ -70,6 +89,7 @@ on_check_button_misc_alignment_toggled (GtkToggleButton *togglebutton, gpointer 
     l = l->next;
   }
 }
+*/
 
 
 static void
@@ -193,17 +213,27 @@ create_grid_of_check_buttons ()
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 0, 1, 1);
   gtk_widget_show (check_button);
   g_signal_connect(G_OBJECT(check_button),
- 	     "toggled",
- 	     G_CALLBACK(on_check_button_halign_toggled),
- 	     NULL);
+    "toggled",
+    G_CALLBACK(on_check_button_halign_toggled),
+    NULL);
 
+  check_button = gtk_check_button_new_with_label ("gtk_label_set_xalign (widget, 1.0)");
+  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 1, 1, 1);
+  gtk_widget_show (check_button);
+  g_signal_connect(G_OBJECT(check_button),
+    "toggled",
+    G_CALLBACK(on_check_button_label_set_xalign_toggled),
+    NULL);
+
+/*
   check_button = gtk_check_button_new_with_label ("gtk_misc_set_alignment (widget, 1.0): Label-only. Deprecated.");
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 1, 1, 1);
   gtk_widget_show (check_button);
   g_signal_connect(G_OBJECT(check_button),
- 	     "toggled",
- 	     G_CALLBACK(on_check_button_misc_alignment_toggled),
- 	     NULL);
+    "toggled",
+    G_CALLBACK(on_check_button_misc_alignment_toggled),
+    NULL);
+*/
 
   check_button = gtk_check_button_new_with_label ("gtk_label_set_justify() / gtk_text_view_set_justification()");
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 2, 1, 1);
