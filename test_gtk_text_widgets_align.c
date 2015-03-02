@@ -301,6 +301,7 @@ create_grid_of_text_widgets ()
   // Row 4:
   entry = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entry), EXAMPLE_TEXT_SINGLE);
+  /* gtk_widget_set_hexpand (entry, TRUE); */
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 4, "GtkEntry:", entry);
   text_widgets = g_list_append (text_widgets, entry);
 
