@@ -45,10 +45,10 @@ on_check_button_halign_toggled (GtkToggleButton *togglebutton, gpointer user_dat
 
   GList *l = text_widgets;
   while (l != NULL)
-  { 
+  {
     GtkWidget *text_widget = GTK_WIDGET (l->data);
     gtk_widget_set_halign (text_widget, align);
-    
+
     l = l->next;
   }
 }
@@ -61,7 +61,7 @@ on_check_button_misc_alignment_toggled (GtkToggleButton *togglebutton, gpointer 
 
   GList *l = text_widgets;
   while (l != NULL)
-  { 
+  {
     GtkWidget *text_widget = GTK_WIDGET (l->data);
     if (GTK_IS_MISC (text_widget)) {
       gtk_misc_set_alignment (GTK_MISC (text_widget), align, 0.5);
@@ -89,7 +89,7 @@ on_check_button_justify_toggled (GtkToggleButton *togglebutton, gpointer user_da
     } else if (GTK_IS_TEXT_VIEW (text_widget)) {
       gtk_text_view_set_justification (GTK_TEXT_VIEW (text_widget), justification);
     }
-    
+
     l = l->next;
   }
 }
@@ -102,7 +102,7 @@ on_check_button_background_color_toggled (GtkToggleButton *togglebutton, gpointe
 
   GList *l = text_widgets;
   while (l != NULL)
-  { 
+  {
     GtkWidget *text_widget = GTK_WIDGET (l->data);
 
     GdkRGBA color;
@@ -113,7 +113,7 @@ on_check_button_background_color_toggled (GtkToggleButton *togglebutton, gpointe
     } else {
       gtk_widget_override_background_color (text_widget, GTK_STATE_FLAG_NORMAL, NULL);
     }
-    
+
     l = l->next;
   }
 }
@@ -209,17 +209,17 @@ create_grid_of_check_buttons ()
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 2, 1, 1);
   gtk_widget_show (check_button);
   g_signal_connect(G_OBJECT(check_button),
- 	     "toggled",
- 	     G_CALLBACK(on_check_button_justify_toggled),
- 	     NULL);
+    "toggled",
+    G_CALLBACK(on_check_button_justify_toggled),
+    NULL);
 
   check_button = gtk_check_button_new_with_label ("Background Color");
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 3, 1, 1);
   gtk_widget_show (check_button);
   g_signal_connect(G_OBJECT(check_button),
- 	     "toggled",
- 	     G_CALLBACK(on_check_button_background_color_toggled),
- 	     NULL);
+    "toggled",
+    G_CALLBACK(on_check_button_background_color_toggled),
+    NULL);
 
   return grid;
 }
@@ -310,9 +310,9 @@ main (int   argc,
   gtk_widget_show (grid_outer);
 
   g_signal_connect(G_OBJECT(window),
- 	     "delete_event",
- 	     G_CALLBACK(on_delete_event),
- 	     NULL);
+    "delete_event",
+    G_CALLBACK(on_delete_event),
+    NULL);
 
   gtk_widget_show (window);
 
