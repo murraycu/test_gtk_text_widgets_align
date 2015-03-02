@@ -28,7 +28,7 @@ GList *text_widgets = NULL;
 const char* EXAMPLE_TEXT_SINGLE =
   "Single line of example text.";
 const char* EXAMPLE_TEXT_MULTIPLE =
-  "Multiple lines of example text. Multiple lines of example text. Multiple lines of example text. Multiple lines of example text.";
+  "Multiple lines of example text. A second line of example text. A third line of example text. A last slightly longer line of examply example text.";
  
 static gint
 on_delete_event (GtkWidget* w, GdkEventAny* e, gpointer data)
