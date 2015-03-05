@@ -145,12 +145,13 @@ create_frame (const gchar *title, GtkWidget *widget)
 {
   GtkWidget *frame;
   GtkWidget *label;
+  gchar *bold_title;
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
 
   label = gtk_label_new (NULL);
-  gchar *bold_title = g_strdup_printf ("<b>%s</b>", title);
+  bold_title = g_strdup_printf ("<b>%s</b>", title);
   gtk_label_set_markup (GTK_LABEL (label), bold_title);
   g_free (bold_title);
   gtk_frame_set_label_widget (GTK_FRAME (frame), label);
