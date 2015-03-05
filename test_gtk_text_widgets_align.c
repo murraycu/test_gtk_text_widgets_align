@@ -103,11 +103,13 @@ on_check_button_justify_toggled (GtkToggleButton *togglebutton, gpointer user_da
   {
     GtkWidget *text_widget = GTK_WIDGET (l->data);
 
-    //Use either set_justify() or set_justificatoin(), depending on the widget type:
+    /* Use either set_justify() or set_justification(),
+     * depending on the widget type: */
     if (GTK_IS_LABEL (text_widget)) {
       gtk_label_set_justify (GTK_LABEL (text_widget), justification);
     } else if (GTK_IS_TEXT_VIEW (text_widget)) {
-      gtk_text_view_set_justification (GTK_TEXT_VIEW (text_widget), justification);
+      gtk_text_view_set_justification (GTK_TEXT_VIEW (text_widget),
+       justification);
     }
 
     l = l->next;
@@ -267,20 +269,20 @@ create_grid_of_text_widgets ()
   gtk_grid_set_row_spacing (GTK_GRID(grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID(grid), 6);
 
-  // Row 0:
+  /* Row 0: */
   label = gtk_label_new(EXAMPLE_TEXT_SINGLE);
   make_widget_higher (label);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 0, "GtkLabel (single line):", label);
   text_widgets = g_list_append (text_widgets, label);
 
-  // Row 1:
+  /* Row 1: */
   label = gtk_label_new(EXAMPLE_TEXT_MULTIPLE);
   make_widget_higher (label);
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 1, "GtkLabel (multi-line):", label);
   text_widgets = g_list_append (text_widgets, label);
 
-  // Row 2:
+  /* Row 2: */
   textview = gtk_text_view_new ();
   make_widget_higher (textview);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
@@ -289,7 +291,7 @@ create_grid_of_text_widgets ()
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 2, "GtkTextView:", textview);
   text_widgets = g_list_append (text_widgets, textview);
 
-  // Row 3:
+  /* Row 3: */
   textview = gtk_text_view_new ();
   make_widget_higher (textview);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
@@ -298,7 +300,7 @@ create_grid_of_text_widgets ()
   add_row_to_grid_of_text_widgets (GTK_GRID (grid), 3, "GtkTextView:", textview);
   text_widgets = g_list_append (text_widgets, textview);
 
-  // Row 4:
+  /* Row 4: */
   entry = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entry), EXAMPLE_TEXT_SINGLE);
   /* gtk_widget_set_hexpand (entry, TRUE); */
