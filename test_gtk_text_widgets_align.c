@@ -25,6 +25,7 @@
 #include<gtk/gtk.h>
 
 GList *text_widgets = NULL;
+GHashTable *text_widgets_style_providers = NULL;
 const char* EXAMPLE_TEXT_SINGLE =
   "Single line of example text.";
 const char* EXAMPLE_TEXT_MULTIPLE =
@@ -117,6 +118,110 @@ on_check_button_justify_toggled (GtkToggleButton *togglebutton, gpointer user_da
 }
 
 static void
+on_css_parsing_error(GtkCssProvider *provider, GtkCssSection *section,
+  const GError *error, gpointer user_data)
+{
+  g_print ("%s: Parsing error: %s\n", G_STRFUNC, error->message);
+
+  if (section) {
+    g_print ("start_line = %d, end_line=%d\n",
+     gtk_css_section_get_start_line (section),
+     gtk_css_section_get_end_line (section));
+    g_print ("start_position = %d, end_position=%d\n",
+     gtk_css_section_get_start_position (section),
+     gtk_css_section_get_end_position (section));
+  }
+}
+
+static GtkCssProvider *
+get_css_provider (GtkWidget* widget)
+{
+  /* Use a GtkStyleProvider so we can change the color, background color, and font.
+   * This was easier before gtk_widget_override_color() was deprecated.
+   */
+
+  GtkCssProvider *css_provider = NULL;
+  GtkStyleContext *style_context = NULL;
+
+  /* Check if the widget already has a style provider from us: */
+  if (!text_widgets_style_providers) {
+    text_widgets_style_providers = g_hash_table_new (NULL, NULL);
+  } else {
+    gpointer data = g_hash_table_lookup (text_widgets_style_providers, widget);
+    if (data)
+      css_provider = GTK_CSS_PROVIDER (data);
+  }
+
+  if (!css_provider) {
+    /* Add our style provider to the widget,
+     * and store it in our GHashTable so we can remove it from the widget later:
+     */
+    css_provider = gtk_css_provider_new ();
+    g_hash_table_insert (text_widgets_style_providers,
+      widget, css_provider);
+
+    style_context = gtk_widget_get_style_context (widget);
+    if(style_context) {
+      gtk_style_context_add_provider (style_context,
+       GTK_STYLE_PROVIDER (css_provider),
+       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
+    g_signal_connect (css_provider,
+      "parsing-error",
+      G_CALLBACK (on_css_parsing_error),
+      NULL);
+  }
+
+  return css_provider;
+}
+
+static void
+remove_css_provider (GtkWidget* widget)
+{
+  GtkCssProvider *css_provider =
+      GTK_CSS_PROVIDER (
+        g_hash_table_lookup (text_widgets_style_providers, widget));
+  if (css_provider) {
+    GtkStyleContext *style_context = gtk_widget_get_style_context (widget);
+    if(style_context) {
+      gtk_style_context_remove_provider (style_context,
+       GTK_STYLE_PROVIDER (css_provider));
+
+      g_object_unref (css_provider);
+    }
+  }
+
+  g_hash_table_remove (text_widgets_style_providers,
+    widget);
+}
+
+static void
+load_background_color_into_css_provider (GtkWidget *widget, const gchar *color)
+{
+  if (color) {
+    gchar* css = g_strdup_printf (
+      "* { background-color: %s; }",
+      color);
+
+    GtkCssProvider* css_provider = get_css_provider(widget);
+    GError *error = NULL;
+    gtk_css_provider_load_from_data (css_provider, css, -1, &error);
+    if (error) {
+      g_print ("%s: Failed to load css: %s\n", G_STRFUNC, error->message);
+      g_clear_error (&error);
+    }
+
+    g_free (css);
+  } else {
+    /* Remove the whole GtkCssProvider to remove the CSS,
+     * because we cannot just pass NULL to gtk_css_provider_load_from_data().
+     */
+    remove_css_provider (widget);
+  }
+}
+
+static void
 on_check_button_background_color_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 {
   gboolean set = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton));
@@ -127,13 +232,10 @@ on_check_button_background_color_toggled (GtkToggleButton *togglebutton, gpointe
   {
     GtkWidget *text_widget = GTK_WIDGET (l->data);
 
-    GdkRGBA color;
-    gdk_rgba_parse(&color, str_color);
-
     if (set) {
-      gtk_widget_override_background_color (text_widget, GTK_STATE_FLAG_NORMAL, &color);
+      load_background_color_into_css_provider (text_widget, str_color);
     } else {
-      gtk_widget_override_background_color (text_widget, GTK_STATE_FLAG_NORMAL, NULL);
+      load_background_color_into_css_provider (text_widget, NULL);
     }
 
     l = l->next;
