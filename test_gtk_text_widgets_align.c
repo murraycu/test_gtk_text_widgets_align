@@ -118,6 +118,27 @@ on_check_button_justify_toggled (GtkToggleButton *togglebutton, gpointer user_da
 }
 
 static void
+on_check_button_entry_alignment_toggled (GtkToggleButton *togglebutton, gpointer user_data)
+{
+  gboolean set = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (togglebutton));
+  float align = set ? 1.0 : 0.0;
+
+  GList *l = text_widgets;
+  while (l != NULL)
+  {
+    GtkWidget *text_widget = GTK_WIDGET (l->data);
+
+    /* Use either set_justify() or set_justification(),
+     * depending on the widget type: */
+    if (GTK_IS_ENTRY (text_widget)) {
+      gtk_entry_set_alignment (GTK_ENTRY (text_widget), align);
+    }
+
+    l = l->next;
+  }
+}
+
+static void
 on_css_parsing_error(GtkCssProvider *provider, GtkCssSection *section,
   const GError *error, gpointer user_data)
 {
@@ -348,8 +369,17 @@ create_grid_of_check_buttons ()
     G_CALLBACK(on_check_button_justify_toggled),
     NULL);
 
-  check_button = gtk_check_button_new_with_label ("Background Color");
+
+  check_button = gtk_check_button_new_with_label ("gtk_entry_set_alignment (widget, 1.0)");
   gtk_grid_attach (GTK_GRID (grid), check_button, 0, 3, 1, 1);
+  gtk_widget_show (check_button);
+  g_signal_connect(G_OBJECT(check_button),
+    "toggled",
+    G_CALLBACK(on_check_button_entry_alignment_toggled),
+    NULL);
+
+  check_button = gtk_check_button_new_with_label ("Background Color");
+  gtk_grid_attach (GTK_GRID (grid), check_button, 0, 4, 1, 1);
   gtk_widget_show (check_button);
   g_signal_connect(G_OBJECT(check_button),
     "toggled",
